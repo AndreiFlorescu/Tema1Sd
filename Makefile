@@ -1,5 +1,5 @@
-build: main.c ./Interface/interface.c ./List/list.c
-	gcc -Wall main.c ./Interface/interface.c ./List/list.c -o main
+build: main.c ./Interface/interface.c ./List/list.c ./Tasks/tasks.c
+	gcc -Wall main.c ./Interface/interface.c ./List/list.c ./Tasks/tasks.c -o tema1 -lm
 
 clean:
-	rm main
+	rm tema1

@@ -4,10 +4,10 @@
 #define DEFTYPES
 
 typedef struct nod {
-	float val;
+	double val;
 	int time;
 	struct nod *next;
-	struct nod *prev;
+	//struct nod *prev;
 } nod;
 
 #endif

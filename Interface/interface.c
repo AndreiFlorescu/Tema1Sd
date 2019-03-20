@@ -5,9 +5,9 @@ void readInput(nod **cap, int *N) {
 	scanf("%d", N);
 	int i;
 	int time;
-	float val;
+	double val;
 	for (i = 0; i < *N; ++i) {
-		scanf("%d %f", &time, &val);
+		scanf("%d %lf", &time, &val);
 		insertLast(&(*cap), time, val);
 	}
 
