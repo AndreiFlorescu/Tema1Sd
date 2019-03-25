@@ -5,6 +5,6 @@
 #include "../List/list.h"
 
 void readInput(nod **cap, int *N);
-void printOutput(nod *cap);
+void printOutput(nod **cap);
 
 #endif

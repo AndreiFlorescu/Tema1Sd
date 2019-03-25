@@ -10,11 +10,8 @@ void readInput(nod **cap, int *N) {
 		scanf("%d %lf", &time, &val);
 		insertLast(&(*cap), time, val);
 	}
-
-	return;
 }
 
-void printOutput(nod *cap) {
-	printList(cap);
-	return;
+void printOutput(nod **cap) {
+	printList(&(*cap));
 }

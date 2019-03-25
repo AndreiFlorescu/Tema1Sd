@@ -8,5 +8,7 @@ void removeExcept(nod **cap);
 void filterMed (nod **cap);
 void filterAvg (nod **cap);
 void uniform (nod **cap);
+void dataComplet (nod **cap);
+void stats (nod **cap, char *);
 
 #endif

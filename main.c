@@ -18,17 +18,17 @@ int main (int argc, char *argv[]) {
 	nod *cap = NULL;
 
 // Declaram optiunile ---------------------------------------------------------
-	char *option[] = {"--e1", "--e2", "--e3", "--u", "c"};
+	char *option[] = {"--e1", "--e2", "--e3", "--u", "--c"};
 	// Nu am folosit o lista pentru a salva optiunile pentru ca este neelegant
 
 // Realizam citirea datelor ---------------------------------------------------
 	readInput(&cap, &N);
-
+	
 // Rezolvam cerintele date ca argument ----------------------------------------
 	int i, j;
 	int query;
-	for (i = 0; i < argc; ++i) {
-		query = -1;
+	for (i = 1; i < argc; ++i) {
+		query = 5;
 		for (j = 0; j < 5; ++j) {
 			if (strcmp(argv[i], option[j]) == 0) {
 				query = j;
@@ -48,11 +48,24 @@ int main (int argc, char *argv[]) {
 			case 3:
 				uniform(&cap);
 				break;
+			case 4:
+				dataComplet(&cap);
+				break;
+			case 5:
+				stats(&cap, argv[1]);
+				freeList(&cap);
+				return 0;
+				break;
+			default:
+				break;
 		}
 	}
 
 // Afisam lista de puncte finala ----------------------------------------------
-	printOutput(cap);
+	printOutput(&cap);
+
+// Eliberam memoria -----------------------------------------------------------
+	freeList(&cap);
 
 	return 0;
 }
