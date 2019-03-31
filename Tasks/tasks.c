@@ -179,43 +179,56 @@ void dataComplet (nod **cap) {
 	int time;
 	int len;
 	double C;
-	double omega[kCompl];
+	double omega;
 	double coef1, coef2;
 	double value;
+	double numit = 0;
+
+	nod *omega1 = NULL;
+	nod *omega2 = NULL;
+	nod *it1, *it2;
 
 	aux = *cap;
 	left = *cap;
 	for (i = 0; i < kCompl - 1; ++i) {
 		aux = aux->next;	
+	}	
+
+	for (i = 0; i < kCompl; ++i) {
+		numit += ((double)i / (kCompl - 1)) * ((double)i / (kCompl - 1)) * 0.9 + 0.1;
+	}
+
+	for (i = 0; i < kCompl; ++i) {
+		omega = ((double)i / (kCompl - 1)) * ((double)i / (kCompl - 1)) * 0.9 + 0.1;
+		omega /= numit;	
+		insertLast(&omega1, 0, omega);
+		omega = ((double)(kCompl - 1 - i) / (kCompl - 1)) * ((double)(kCompl - 1 - i) / (kCompl - 1)) * 0.9 + 0.1;
+		omega /= numit;
+		insertLast(&omega2, 0, omega);
 	}
 
 	while (aux->next != NULL) {
 		len = 0;
+		
 		if (aux->next->time - aux->time > 1000) {
 			right = aux->next;
 			time = aux->time + 200;
-			double numit = 0;
 			compl = NULL;
-
-			for (i = 0; i < kCompl; ++i) {
-				numit += ((double)i / (kCompl - 1)) * ((double)i / (kCompl - 1)) * 0.9 + 0.1;
-			}
-
-			for (i = 0; i < kCompl; ++i) {
-				omega[i] = ((double)i / (kCompl - 1)) * ((double)i / (kCompl - 1)) * 0.9 + 0.1;
-				omega[i] /= numit;	
-			}
 
 			leftAux = left;
 			rightAux = right;
+			it1 = omega1;
+			it2 = omega2;
 			coef1 = 0;
 			coef2 = 0;
 			for (i = 0; i < kCompl; ++i) {
-				coef1 += leftAux->val * omega[i];
-				coef2 += rightAux->val * omega[kCompl - 1 - i];
+				coef1 += leftAux->val * it1->val;
+				coef2 += rightAux->val * it2->val;
 
 				leftAux = leftAux->next;
 				rightAux = rightAux->next;
+				it1 = it1->next;
+				it2 = it2->next;
 			}
 
 			while (time < aux->next->time) {
@@ -237,6 +250,8 @@ void dataComplet (nod **cap) {
 		left = left->next;
 		aux = aux->next;
 	}
+	freeList(&omega1);
+	freeList(&omega2);
 }
 
 void stats (nod **cap, char *query) {
