@@ -1,3 +1,5 @@
+/* Headerul care contine functiile pentru rezolvarea cerintelor */
+
 #ifndef TASKS
 #define TASKS
 

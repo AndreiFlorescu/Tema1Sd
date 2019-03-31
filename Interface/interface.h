@@ -1,3 +1,5 @@
+/* Headerul care contine functiile de I/O folosite */
+
 #ifndef INTERFACE
 #define INTERFACE
 

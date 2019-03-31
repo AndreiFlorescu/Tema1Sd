@@ -7,9 +7,11 @@
 #define k 5
 #define kCompl 3
 
+// Cerinta 1.1 --e1 -----------------------------------------------------------
 void removeExcept(nod **cap) {
 	double sum = 0;
 	double avg, dev;
+	int i;
 
 	// Lista in care salvam solutia
 	nod *sol = NULL;
@@ -23,10 +25,14 @@ void removeExcept(nod **cap) {
 	st->val = 0;
 	dr = *cap;
 
-	insertLast(&sol, (*cap)->time, (*cap)->val);
-	insertLast(&sol, (*cap)->next->time, (*cap)->next->val);
+	// Primele 2 elemente raman nesichimbate
+	aux = *cap;
+	for (i = 0; i < k / 2; ++i) {
+		insertLast(&sol, aux->time, aux->val);
+		aux = aux->next;
+	}
 
-	int i;
+	// Calculam prima parte a sumei din fereastra
 	for (i = 0; i < k - 1; ++i) {
 		if (i == k / 2) {
 			middle = dr;
@@ -36,6 +42,7 @@ void removeExcept(nod **cap) {
 	}
 
 	while (dr != NULL) {
+		// Calculam suma punctelor din fereastra
 		sum -= st->val;
 		st = st->next;
 		sum += dr->val;
@@ -50,23 +57,33 @@ void removeExcept(nod **cap) {
 			aux = aux->next;
 		}
 		
+		// Calculam deviatia
 		dev /= k;
 		dev = sqrt(dev);
 
+		// Daca punctul respecta conditia este adaugat
 		if (avg + dev >= middle->val && avg - dev <= middle->val) {
 			insertLast(&sol, middle->time, middle->val);
 		}
 
 		middle = middle->next;
 	}
-	insertLast(&sol, middle->time, middle->val);
-	insertLast(&sol, middle->next->time, middle->next->val);
 
+	// Ultimele 2 elemente raman neschimbate
+	for (i = 0; i < k / 2; ++i) {
+		insertLast(&sol, middle->time, middle->val);
+		middle = middle->next;
+	}
+
+	// Eliberam memoria
 	free(temp);
 	freeList(&(*cap));
+
+	// Lista cap devine lista solutie
 	*cap = sol;
 }
 
+// Cerinta 1.2.1 --e2 ---------------------------------------------------------
 void filterMed (nod **cap) {
 	int flag;
 	int i;
@@ -82,12 +99,14 @@ void filterMed (nod **cap) {
 	while (dr != NULL) {
 		dr = st;
 		nod *subList = NULL;
+		// Generam sublista
 		for (i = 0; i < k; ++i) {
 			insertLast(&subList, dr->time, dr->val);
 			dr = dr->next;
 		}
 		st = st->next;
 
+		// Sortam elementele sublistei
 		flag = 0;
 		while (flag == 0) {
 			flag = 1;
@@ -108,14 +127,19 @@ void filterMed (nod **cap) {
 			middle = middle->next;
 		}
 
+		// Adaugam elementul median al ferestrei curente
 		insertLast(&sol, middle->time, middle->val);
 		freeList(&subList);
 	}
 
+	// Eliberam memoria
 	freeList(&(*cap));
+
+	// Lista cap devine lista solutie
 	*cap = sol;
 }
 
+// Cerinta 1.2.2 --e3 ---------------------------------------------------------
 void filterAvg (nod **cap) {
 	double sum = 0;
 	double avg;
@@ -131,6 +155,7 @@ void filterAvg (nod **cap) {
 	st->val = 0;
 	dr = *cap;
 
+	// Calculam prima parte a sumei din fereastra
 	int i;
 	for (i = 0; i < k - 1; ++i) {
 		if (i == k / 2) {
@@ -141,28 +166,39 @@ void filterAvg (nod **cap) {
 	}
 
 	while (dr != NULL) {
+		// Calculam suma punctelor din fereastra
 		sum -= st->val;
 		st = st->next;
 		sum += dr->val;
 		dr = dr->next;
 
+		// Calculam media
 		avg = sum / k;
 
+		// Inseram media
 		insertLast(&sol, middle->time, avg);
 		
 		middle = middle->next;
 	}
 
+	// Eliberam memoria
 	free(temp);
 	freeList(&(*cap));
+
+	// Lista cap devine lista solutie
 	*cap = sol;
 }
 
+// Cerinta 1.3 --u ------------------------------------------------------------
 void uniform (nod **cap) {
 	nod *aux = *cap;
 
 	while (aux->next != NULL) {
-		if (aux->next->time - aux->time >= 100 && aux->next->time - aux->time <= 1000) {
+		// Verificam daca diferenta de timp se afla in intervalul [0.1, 1] s
+		if (aux->next->time - aux->time >= 100 && 
+			aux->next->time - aux->time <= 1000) {
+			
+			// Calculam valoarea noua a punctului
 			aux->next->time = (aux->next->time + aux->time) / 2;
 			aux->next->val = (aux->next->val + aux->val) / 2;
 		}
@@ -170,6 +206,7 @@ void uniform (nod **cap) {
 	}
 }
 
+// Cerinta 1.4 --c ------------------------------------------------------------
 void dataComplet (nod **cap) {
 	nod *aux;
 	nod *left, *right;
@@ -184,6 +221,7 @@ void dataComplet (nod **cap) {
 	double value;
 	double numit = 0;
 
+	// Listele care salveaza coeficientii omega
 	nod *omega1 = NULL;
 	nod *omega2 = NULL;
 	nod *it1, *it2;
@@ -194,6 +232,7 @@ void dataComplet (nod **cap) {
 		aux = aux->next;	
 	}	
 
+	// Calcularea lui omega
 	for (i = 0; i < kCompl; ++i) {
 		numit += ((double)i / (kCompl - 1)) * ((double)i / (kCompl - 1)) * 0.9 + 0.1;
 	}
@@ -210,11 +249,13 @@ void dataComplet (nod **cap) {
 	while (aux->next != NULL) {
 		len = 0;
 		
+		// Verificam diferenta de timp
 		if (aux->next->time - aux->time > 1000) {
 			right = aux->next;
 			time = aux->time + 200;
 			compl = NULL;
 
+			// Calcularea coeficientilor
 			leftAux = left;
 			rightAux = right;
 			it1 = omega1;
@@ -231,6 +272,7 @@ void dataComplet (nod **cap) {
 				it2 = it2->next;
 			}
 
+			// Calcularea valorii noului punct
 			while (time < aux->next->time) {
 				C = (double)(time - aux->time) / (right->time - aux->time);
 				value = (1 - C) * coef1 + C * coef2;
@@ -239,6 +281,7 @@ void dataComplet (nod **cap) {
 				time += 200;
 			}
 
+			// Inserearea listei noi in mijlocul celei initiale
 			len = length(&compl);
 			insertList(&(*cap), aux, &compl);
 
@@ -250,14 +293,19 @@ void dataComplet (nod **cap) {
 		left = left->next;
 		aux = aux->next;
 	}
+
+	// Eliberarea memoriei
 	freeList(&omega1);
 	freeList(&omega2);
 }
 
+// Cerinta 1.5 Bonus --st -----------------------------------------------------
 void stats (nod **cap, char *query) {
 	int len = strlen(query);
 	int step = 0;
 	int i;
+
+	// Aflarea lungimii intervalului
 	for (i = 4; i < len; ++i) {
 		step *= 10;
 		step += query[i] - '0';
@@ -266,6 +314,7 @@ void stats (nod **cap, char *query) {
 	len = length(&(*cap));
 	nod *aux;
 
+	// Sortarea listei
 	int flag = 0;
 	while (flag == 0) {
 		flag = 1;
@@ -290,6 +339,7 @@ void stats (nod **cap, char *query) {
 	int st;
 	int cntr;
 	aux = *cap;
+	// Calcularea numerelor de puncte din fiecare interval
 	while (aux != NULL) {
 		st = ((int)aux->val / step) * step;
 		if (aux->val < 0) {
@@ -301,6 +351,8 @@ void stats (nod **cap, char *query) {
 			cntr++;
 			aux = aux->next;
 		}
+
+		// Afisarea intervalului si a numarului de puncte din acesta
 		printf("[%d, %d] %d\n", st, st + step, cntr);
 	}
 }

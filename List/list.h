@@ -1,3 +1,5 @@
+/* Headerul care contine functiile pentru liste folosite */
+
 #ifndef LIST
 #define LIST
 

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "interface.h"
 
+// Citirea --------------------------------------------------------------------
 void readInput(nod **cap, int *N) {
 	scanf("%d", N);
 	int i;
@@ -12,6 +13,7 @@ void readInput(nod **cap, int *N) {
 	}
 }
 
+// Afisarea -------------------------------------------------------------------
 void printOutput(nod **cap) {
 	printList(&(*cap));
 }

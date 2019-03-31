@@ -36,22 +36,22 @@ int main (int argc, char *argv[]) {
 			}
 		}
 		switch (query) {
-			case 0:
+			case 0:						// --e1
 				removeExcept(&cap);
 				break;
-			case 1:
+			case 1:						// --e2
 				filterMed(&cap);
 				break;
-			case 2:
+			case 2:						// --e3
 				filterAvg(&cap);
 				break;
-			case 3:
+			case 3:						// --u
 				uniform(&cap);
 				break;
-			case 4:
+			case 4:						// --c
 				dataComplet(&cap);
 				break;
-			case 5:
+			case 5:						// --st
 				stats(&cap, argv[1]);
 				freeList(&cap);
 				return 0;

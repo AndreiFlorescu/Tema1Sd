@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include "list.h"
 
+// Initializarea listei -------------------------------------------------------
 void initList(nod** cap) {
 	*cap = (nod*)malloc(sizeof(nod));
 	(*cap)->next = NULL;
 }
 
+// Inserarea la sfarsit -------------------------------------------------------
 void insertLast(nod** cap, int time, double val) {
-    if (*cap == NULL) {
+    if (*cap == NULL) {         // Daca lista e nula o initializam
         initList(&(*cap));
         (*cap)->time = time;
         (*cap)->val = val;
@@ -26,6 +28,7 @@ void insertLast(nod** cap, int time, double val) {
     aux->next = new;
 }
 
+// Lungimea listei ------------------------------------------------------------
 int length(nod** cap) {
     if (*cap == NULL) {
         return 0;
@@ -41,12 +44,14 @@ int length(nod** cap) {
     return len;
 }
 
+// Stergerea primului element al listei ---------------------------------------
 void deleteHead(nod** cap) {
     nod* new = *cap;
     *cap = (*cap)->next;
     free(new); 
 }
 
+// Afisarea listei ------------------------------------------------------------
 void printList(nod** cap) {
 	printf("%d\n", length(&(*cap)));
 
@@ -57,6 +62,7 @@ void printList(nod** cap) {
     }
 }
 
+// Inserarea unei liste intr-o lista ------------------------------------------
 void insertList (nod** cap, nod* poz, nod** cap2) {
     nod* aux1 = *cap;
     nod* aux2 = *cap2;
@@ -72,8 +78,9 @@ void insertList (nod** cap, nod* poz, nod** cap2) {
     aux1->next = *cap2;
 }
 
+// Eliberarea memoriei --------------------------------------------------------
 void freeList(nod** cap) {
-    if (*cap == NULL) {
+    if (*cap == NULL) {         // Daca lista e nula nu avem ce elibera
 		return;
 	}
 	freeList(&((*cap)->next));
